@@ -23,9 +23,9 @@ def MinMaxScaling():
         mms.fit(data)
         scaled_data = mms.transform(data)
         scaled_data = pd.DataFrame(data = scaled_data, columns=data.columns)
+
     except ValueError:
         data = data.set_index("datetime")
         mms.fit(data)
         scaled_data = mms.transform(data)
         scaled_data = pd.DataFrame(data = scaled_data, columns=data.columns)
-
