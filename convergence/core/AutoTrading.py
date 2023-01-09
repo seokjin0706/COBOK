@@ -157,16 +157,16 @@ def trade(api_key,secret):
 
     # 이전과 시간이 다르므로 조건 만족시 구매 
     if buy_min != now_min and Trading_Flag == 1:
-      # order = binance.create_market_buy_order(
-      # symbol="BTC/USDT",
-      # amount=0.001)
+      order = binance.create_market_buy_order(
+      symbol="BTC/USDT",
+      amount=0.001)
       Account = buy(Account,df1.iloc[-1]['open'])
       buy_min = now_min
 
     elif Trading_Flag == 0 and Account["amount"] >= 0.01 and 0.15 * leverage <= Re_ROE(binance):
-      # order = binance.create_market_sell_order(
-      # symbol="BTC/USDT",
-      # amount=float(Re_Amount()) )
+      order = binance.create_market_sell_order(
+      symbol="BTC/USDT",
+      amount=float(Re_Amount()) )
       Account = sell(Account,df1.iloc[-1]['open'])
 
 
