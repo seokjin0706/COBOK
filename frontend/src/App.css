@@ -1,0 +1,28 @@
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.CobokNavbar{
+  background: linear-gradient(rgb(105, 29, 65), rgba(28, 16, 77, 0.63));
+}
+.background-gradient {
+  background: linear-gradient(rgb(68, 34, 87), rgb(192, 130, 140));
+}
+
+.login{
+  min-width: 35%;
+  opacity:0.7;
+}
+.AutoTrading{
+  opacity:0.7;
+}
+
+.login-btn{
+  background-color: rgba(113, 190, 171, 0.26);
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
