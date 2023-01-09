@@ -107,8 +107,6 @@ def trade(api_key,secret):
     "total_profit" : 0,
   }
   model = load_model("model/keras_DNN_modelV2")
-  api_key = "598lqCWX727NXfflVt1qejRSZXphSuWVlcdMm1gdtAVD3lytdDhjpbV3eyxcr0z1"
-  secret  = "XxDx9DuVDiYngMV71jWHHCFYRhhph4bdZdGCSH4JVb2s2jCJtHW6gbpPwZWjfYvf"
   binance = ccxt.binance(config={
     'apiKey': api_key, 
     'secret': secret,
@@ -159,16 +157,16 @@ def trade(api_key,secret):
 
     # 이전과 시간이 다르므로 조건 만족시 구매 
     if buy_min != now_min and Trading_Flag == 1:
-      # order = binance.create_market_buy_order(
-      # symbol="BTC/USDT",
-      # amount=0.001)
+      order = binance.create_market_buy_order(
+      symbol="BTC/USDT",
+      amount=0.001)
       Account = buy(Account,df1.iloc[-1]['open'])
       buy_min = now_min
 
     elif Trading_Flag == 0 and Account["amount"] >= 0.01 and 0.15 * leverage <= Re_ROE(binance):
-      # order = binance.create_market_sell_order(
-      # symbol="BTC/USDT",
-      # amount=float(Re_Amount()) )
+      order = binance.create_market_sell_order(
+      symbol="BTC/USDT",
+      amount=float(Re_Amount()) )
       Account = sell(Account,df1.iloc[-1]['open'])
 
 
