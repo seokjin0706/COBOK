@@ -17,8 +17,8 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
   @Post()
-  create(@Body() user: UserDto) {
-    return this.usersService.create(user);
+  async create(@Body() user: UserDto) {
+    return await this.usersService.create(user);
   }
   @Delete('/:id')
   remove(@Param('id') id: number) {

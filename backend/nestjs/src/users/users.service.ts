@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserDto } from './dto/user.dto';
@@ -16,8 +16,14 @@ export class UsersService {
   findOne(id: number): Promise<User> {
     return this.usersRepository.findOneBy({ id });
   }
-  async create(user: UserDto): Promise<void> {
-    await this.usersRepository.save(user);
+  async create(user: UserDto): Promise<UserDto> {
+    let userFind = await this.usersRepository.findOneBy({
+      userName: user.userName,
+    });
+    if (userFind) {
+      throw new HttpException('Username aleady used!', HttpStatus.BAD_REQUEST);
+    }
+    return await this.usersRepository.save(user);
   }
   async remove(id: number): Promise<void> {
     await this.usersRepository.delete(id);
