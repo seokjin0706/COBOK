@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserDto } from './dto/user.dto';
@@ -27,5 +32,19 @@ export class UsersService {
   }
   async remove(id: number): Promise<void> {
     await this.usersRepository.delete(id);
+  }
+
+  async login(user: UserDto): Promise<UserDto> {
+    let userFind = await this.usersRepository.findOneBy({
+      userName: user.userName,
+    });
+    if (!userFind) {
+      throw new UnauthorizedException('Username does not exist');
+    }
+    if (userFind.password !== user.password) {
+      throw new UnauthorizedException('password does not match');
+    }
+
+    return userFind;
   }
 }

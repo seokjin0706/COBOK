@@ -24,4 +24,8 @@ export class UsersController {
   remove(@Param('id') id: number) {
     return this.usersService.remove(id);
   }
+  @Post('/login')
+  async login(@Body() user: UserDto): Promise<UserDto> {
+    return await this.usersService.login(user);
+  }
 }
