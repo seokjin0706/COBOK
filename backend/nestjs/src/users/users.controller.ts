@@ -1,8 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
-
+import { Response } from 'express';
 @Controller('/api/users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -25,7 +33,9 @@ export class UsersController {
     return this.usersService.remove(id);
   }
   @Post('/login')
-  async login(@Body() user: UserDto): Promise<UserDto> {
-    return await this.usersService.login(user);
+  async login(@Body() user: UserDto, @Res() res: Response) {
+    const jwt = await this.usersService.login(user);
+    res.setHeader('Authorization', 'Bearer ' + jwt.accessToken);
+    return res.json(jwt);
   }
 }
