@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
   constructor(
@@ -22,6 +22,8 @@ export class UsersService {
     return this.usersRepository.findOneBy({ id });
   }
   async create(user: UserDto): Promise<UserDto> {
+    await this.transformPassword(user);
+    console.log(user);
     let userFind = await this.usersRepository.findOneBy({
       userName: user.userName,
     });
@@ -41,10 +43,18 @@ export class UsersService {
     if (!userFind) {
       throw new UnauthorizedException('Username does not exist');
     }
-    if (userFind.password !== user.password) {
+    const validatePassword = await bcrypt.compare(
+      user.password,
+      userFind.password,
+    );
+    if (!validatePassword) {
       throw new UnauthorizedException('password does not match');
     }
-
     return userFind;
+  }
+
+  async transformPassword(user: UserDto): Promise<void> {
+    user.password = await bcrypt.hash(user.password, 10);
+    return Promise.resolve();
   }
 }
