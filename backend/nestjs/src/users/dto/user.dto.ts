@@ -9,3 +9,10 @@ export class UserDto {
   @IsString()
   apiSecretKey: string;
 }
+
+export class UserLoginDto {
+  @IsString()
+  userName: string;
+  @IsString()
+  password: string;
+}

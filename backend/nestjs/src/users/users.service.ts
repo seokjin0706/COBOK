@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserDto } from './dto/user.dto';
+import { UserDto, UserLoginDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Payload } from './security/payload.interface';
@@ -39,7 +39,7 @@ export class UsersService {
     await this.usersRepository.delete(id);
   }
 
-  async login(user: UserDto): Promise<{ accessToken: string }> {
+  async login(user: UserLoginDto): Promise<{ accessToken: string }> {
     let userFind = await this.usersRepository.findOneBy({
       userName: user.userName,
     });

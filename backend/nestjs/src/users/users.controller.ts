@@ -7,7 +7,7 @@ import {
   Post,
   Res,
 } from '@nestjs/common';
-import { UserDto } from './dto/user.dto';
+import { UserDto, UserLoginDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import { Response } from 'express';
@@ -45,7 +45,7 @@ export class UsersController {
     return this.usersService.remove(id);
   }
   @Post('/login')
-  async login(@Body() user: UserDto, @Res() res: Response) {
+  async login(@Body() user: UserLoginDto, @Res() res: Response) {
     const jwt = await this.usersService.login(user);
     res.setHeader('Authorization', 'Bearer ' + jwt.accessToken);
     return res.json(jwt);
