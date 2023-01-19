@@ -1,14 +1,12 @@
 import ccxt
-import joblib
 import time
 import numpy as np
 import pandas as pd
-import sys
 import json
 from keras.models import load_model
 from datetime import datetime
-sys.path.append("/Users/yuhyeonseog/COBOK/COBOK/convergence/indicator")
 from DATA_INDICATORS import *
+
 def download_data(frame):
   binance = ccxt.binance()
   btc_ohlcv = binance.fetch_ohlcv("BTC/USDT",limit = 500,timeframe=frame)
@@ -16,6 +14,7 @@ def download_data(frame):
   df['datetime'] = pd.to_datetime(df['datetime'], unit='ms')
   df.set_index('datetime', inplace=True)
   return df
+
 def buy(Account,price):
   Account["average_price"] = ( ( Account["amount"] * Account["average_price"] ) + ( price * 0.01 ) ) / ( Account["amount"] + 0.01 )
   Account["amount"] += 0.01
@@ -26,10 +25,12 @@ def sell(Account,price):
   Account["amount"] = 0
   Account["average_price"] = 0
   return Account
+
 def timestemp_to_int(dt):
     dt = datetime.timestamp(dt)
     dt = int(dt) * 1000
     return dt
+
 def info(binance, info_data):
   balance = binance.fetch_balance(params={"type": "future"})
   Now_price = binance.fetch_ticker("BTC/USDT")["close"]
@@ -57,6 +58,7 @@ def info(binance, info_data):
   info_data["quantity"] = amount
   info_data["average"] = entry_price
   info_data["profit_rate"] = entry_price
+
 def Re_ROE(binance):
   balance = binance.fetch_balance(params={"type": "future"})
   Now_price = binance.fetch_ticker("BTC/USDT")["close"]
@@ -106,7 +108,7 @@ def trade(api_key,secret):
     "signal" : 0,
     "total_profit" : 0,
   }
-  model = load_model("model/keras_DNN_modelV2")
+  model = load_model("convergence/model/keras_DNN_modelV2")
   binance = ccxt.binance(config={
     'apiKey': api_key, 
     'secret': secret,
@@ -183,5 +185,5 @@ def trade(api_key,secret):
     info_data["signal"] = Trading_Flag
     info_data["total_profit"] = Account["result"]
     Info_Df = pd.DataFrame.from_dict([info_data])
-    Info_Df.to_csv("Data/Trading_Data.csv")
+    Info_Df.to_csv("convergence/core/Data/TradingData.csv")
     time.sleep(5)
