@@ -185,5 +185,11 @@ def trade(api_key,secret):
     info_data["signal"] = Trading_Flag
     info_data["total_profit"] = Account["result"]
     Info_Df = pd.DataFrame.from_dict([info_data])
+
+    balance = binance.fetch_balance(params={"type": "future"})
+    info_data["position_wallet"] = balance['USDT']['used']
+    info_data["Free_wallet"] = balance['USDT']['free']
+    info_data["Total_wallet"] = balance['USDT']['total']
+    
     Info_Df.to_csv("convergence/core/Data/TradingData.csv")
     time.sleep(5)
