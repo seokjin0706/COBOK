@@ -6,6 +6,7 @@ import json
 from keras.models import load_model
 from datetime import datetime
 from DATA_INDICATORS import *
+import os
 
 def download_data(frame):
   binance = ccxt.binance()
@@ -108,7 +109,7 @@ def trade(api_key,secret):
     "signal" : 0,
     "total_profit" : 0,
   }
-  model = load_model("convergence/model/keras_DNN_modelV2")
+  model = load_model(os.path.dirname(__file__) +  '/../model/keras_DNN_modelV2')
   binance = ccxt.binance(config={
     'apiKey': api_key, 
     'secret': secret,
@@ -191,7 +192,5 @@ def trade(api_key,secret):
     info_data["Total_wallet"] = balance['USDT']['total']
 
     Info_Df = pd.DataFrame.from_dict([info_data])
-    Info_Df.to_csv("convergence/core/Data/TradingData.csv")
+    Info_Df.to_csv(os.path.dirname(__file__) +  '/Data/TradingData.csv')
     time.sleep(5)
-
-trade("598lqCWX727NXfflVt1qejRSZXphSuWVlcdMm1gdtAVD3lytdDhjpbV3eyxcr0z1","XxDx9DuVDiYngMV71jWHHCFYRhhph4bdZdGCSH4JVb2s2jCJtHW6gbpPwZWjfYvf")

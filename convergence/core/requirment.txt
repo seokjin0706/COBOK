@@ -1,7 +1,8 @@
-ccxt == 1.75.67
+ccxt == 2.6.43
 joblib == 1.1.0
 numpy == 1.21.2
 pandas == 1.3.4
 keras == 2.8.0
 tensorflow == 2.8.0
 pandas_ta == 0.3.14b0
+protobuf==3.20.1
