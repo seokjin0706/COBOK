@@ -184,12 +184,14 @@ def trade(api_key,secret):
     info_data["raw_Time"] = timestemp_to_int(int_date)
     info_data["signal"] = Trading_Flag
     info_data["total_profit"] = Account["result"]
-    Info_Df = pd.DataFrame.from_dict([info_data])
 
     balance = binance.fetch_balance(params={"type": "future"})
     info_data["position_wallet"] = balance['USDT']['used']
     info_data["Free_wallet"] = balance['USDT']['free']
     info_data["Total_wallet"] = balance['USDT']['total']
-    
+
+    Info_Df = pd.DataFrame.from_dict([info_data])
     Info_Df.to_csv("convergence/core/Data/TradingData.csv")
     time.sleep(5)
+
+trade("598lqCWX727NXfflVt1qejRSZXphSuWVlcdMm1gdtAVD3lytdDhjpbV3eyxcr0z1","XxDx9DuVDiYngMV71jWHHCFYRhhph4bdZdGCSH4JVb2s2jCJtHW6gbpPwZWjfYvf")

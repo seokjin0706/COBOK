@@ -1,2 +1,2 @@
-,raw_Time,time,quantity,average,leverage,profit_rate,profit,signal,total_profit
-0,1674126878000,2023-01-19 20:14:38,0.000,0.0,0,0.0,0.0,-1,0
+,raw_Time,time,quantity,average,leverage,profit_rate,profit,signal,total_profit,position_wallet,Free_wallet,Total_wallet
+0,1674130248000,2023-01-19 21:10:48,0.000,0.0,0,0.0,0.0,-1,0,0.0,113.33521052,113.33521052
