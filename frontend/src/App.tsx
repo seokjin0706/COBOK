@@ -1,15 +1,17 @@
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
-import { Routes, Route } from 'react-router-dom';
-import { AutoTrading } from './pages/AutoTrading.page';
-import { Login } from './pages/Login.page';
-import { SignUp} from './pages/SignUp.page';
-import { CobokNavbar } from './components/CobokNavbar.component'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import { AutoTrading } from "./pages/AutoTrading.page";
+import { Login } from "./pages/Login.page";
+import { SignUp } from "./pages/SignUp.page";
+import { SignUpResult } from "./pages/SignUpResult.page";
+import { CobokNavbar } from "./components/CobokNavbar.component";
 function App() {
   return (
-    <div className="App background-gradient" style={{ backgroundColor: 'black', height: '100vh' }}>
-
+    <div
+      className="App background-gradient"
+      style={{ backgroundColor: "black", height: "100vh" }}
+    >
       <div>
         <CobokNavbar />
       </div>
@@ -17,11 +19,10 @@ function App() {
         <Route path="/AutoTrading" element={<AutoTrading />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/SignUp" element={<SignUp />} />
+        <Route path="/SignUpResult" element={<SignUpResult />} />
       </Routes>
     </div>
   );
 }
-
-
 
 export default App;
