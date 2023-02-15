@@ -25,7 +25,7 @@ class User(BaseModel):
     apiSecretKey :str
 
 
-@app.get("/api/{coinId}/auto-trading")
+@app.post("/api/{coinId}/auto-trading")
 def autoTrading(coinId, user: User):
     trade(user.apiKey, user.apiSecretKey)
     return {"message" : "done"}
