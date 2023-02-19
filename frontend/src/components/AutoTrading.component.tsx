@@ -23,6 +23,7 @@ const OverviewContainer = styled.div<{ ratio: number }>`
   grid-template-columns: repeat(${(props) => props.ratio}, 1fr);
 `;
 const Overview = styled.div`
+  width: 100%;
   justify-content: space-between;
 
   background-color: ${(props) => props.theme.btnColor};
@@ -62,7 +63,8 @@ export function AutoTradingResult() {
   return (
     <>
       <Button
-        className="login-btn"
+        id="refresh-btn-id"
+        className="refresh-btn"
         type="submit"
         onClick={() => {
           axios
