@@ -46,7 +46,7 @@ def info(binance, info_data):
           ROE = round((Now_price - entry_price) / Now_price * leverage * 100 ,2)
           print("현재 코인 가격 :",Now_price)
           print("현재 보유 수량 :",amount) # 수량
-          print("현재 평단가 :",entry_price) # 진입가격 -> 평단가       
+          print("현재 평단가 :",entry_price) # 진입가격 -> 평단가
           print("현재 적용 레버리지 :",position["leverage"]) # 레버리지
           if float(position["positionAmt"]) == 0.0:
             info_data["profit_rate"] = 0.0
@@ -91,23 +91,30 @@ def Get_Trading_Data():
     json_data = json.dumps(parsed)
     return json_data
 
+def curr_price(data):
+  return data.iloc[-1]["close"]
 def trade(api_key,secret):
   Account = {
     "result" : 0,
     "amount" : 0,
     "average_price" : 0
   }
+  signal = {
+    "-1" : "관망",
+    "1" : "매수",
+    "0" : "매도"
+  }
   info_data = {
-    "raw_Time" : 0,
-    "time" : 0,
-    "quantity" : 0,
-    "average" : 0,
-    "leverage" : 0,
-    "quantity" : 0,
-    "profit_rate" :0,
-    "profit" : 0,
-    "signal" : 0,
-    "total_profit" : 0,
+    "raw_Time" : 0, # 현재 시각(int형으로 변환한것)
+    "time" : 0, # 현재 시각
+    "average" : 0, # 평단가
+    "leverage" : 0, # 배율
+    "quantity" : 0, # 수량
+    "profit_rate" :0, #현재 포지션 수익률
+    "profit" : 0, # 현재 포지션 수익
+    "signal" : 0, # 매수 신호
+    "total_profit" : 0, # 총 수익
+    "coin_curr_price" :0 # 현재 코인 가격
   }
   model = load_model(os.path.dirname(__file__) +  '/../model/keras_DNN_modelV2')
   binance = ccxt.binance(config={
@@ -150,9 +157,9 @@ def trade(api_key,secret):
 
     Trading_Flag = -1
 
-    if pred[-1][0] > 0.92:
+    if pred[-1][0] > 0.8:
       Trading_Flag = 1
-    elif pred[-1][0] < 0.1:
+    elif pred[-1][0] < 0.2:
       Trading_Flag = 0
 
     now = datetime.now()
@@ -183,13 +190,14 @@ def trade(api_key,secret):
     format = '%Y-%m-%d %H:%M:%S'
     int_date = datetime.strptime(info_data["time"],format)
     info_data["raw_Time"] = timestemp_to_int(int_date)
-    info_data["signal"] = Trading_Flag
+    info_data["signal"] = signal[str(Trading_Flag)]
     info_data["total_profit"] = Account["result"]
 
     balance = binance.fetch_balance(params={"type": "future"})
     info_data["position_wallet"] = balance['USDT']['used']
     info_data["Free_wallet"] = balance['USDT']['free']
     info_data["Total_wallet"] = balance['USDT']['total']
+    info_data["coin_curr_price"] = curr_price(data)
 
     Info_Df = pd.DataFrame.from_dict([info_data])
     Info_Df.to_csv(os.path.dirname(__file__) +  '/Data/TradingData.csv')
