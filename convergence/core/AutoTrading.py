@@ -58,7 +58,6 @@ def info(binance, info_data):
           info_data["profit"] = round(ROE/100 * Margin,2)
   info_data["quantity"] = amount
   info_data["average"] = entry_price
-  info_data["profit_rate"] = entry_price
 
 def Re_ROE(binance):
   balance = binance.fetch_balance(params={"type": "future"})
@@ -126,6 +125,7 @@ def trade(api_key,secret):
         }
     })
   leverage = 10
+  info_data["leverage"] = leverage
   markets = binance.load_markets()
   symbol = "BTC/USDT"
   market = binance.market(symbol)
