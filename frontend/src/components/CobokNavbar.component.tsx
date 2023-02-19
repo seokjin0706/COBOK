@@ -1,17 +1,59 @@
 import axios, { AxiosError } from "axios";
-import { Nav, Container, Navbar } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 interface UserStateType {
   userName: string;
   isLogin: boolean;
 }
 
-
-
+const NavBar = styled.div`
+  display: flex;
+  align-items: center;
+  height: 10vh;
+  padding: 20px 0px;
+  border-style: solid;
+  border-width: 1px 0px 1px 0px;
+  border-color: rgba(255, 255, 255, 0.4);
+`;
+const NavBrand = styled.span`
+  font-size: 30px;
+  margin-left: 80px;
+  margin-right: 40px;
+  a:hover {
+    color: ${(props) => props.theme.textColor};
+  }
+`;
+const NavAutoTrading = styled.span`
+  font-size: 18px;
+  margin-right: auto;
+  a:hover {
+    color: ${(props) => props.theme.accentColor};
+  }
+`;
+const NavSignIn = styled.span`
+  font-size: 18px;
+  border: 1px solid white;
+  border-radius: 15px;
+  padding: 10px 20px;
+  a:hover {
+    color: ${(props) => props.theme.accentColor};
+  }
+`;
+const NavSignUp = styled.span`
+  font-size: 18px;
+  border: 1px solid white;
+  border-radius: 15px;
+  padding: 10px 20px;
+  margin-right: 80px;
+  margin-left: 15px;
+  a:hover {
+    color: ${(props) => props.theme.accentColor};
+  }
+  background-color: #1755745c;
+`;
 export function CobokNavbar() {
-  let navigate = useNavigate();
   let [userName, setUserName] = useState("");
   let [isLogin, setIsLogin] = useState(false);
 
@@ -34,28 +76,24 @@ export function CobokNavbar() {
   }, []);
 
   return (
-    <>
-      <Navbar className="CobokNavbar" fixed="top" bg="dark" variant="dark">
-        <Container>
-          <Navbar.Brand style={{ cursor: "pointer" }} href="/">
-            💰COBOK
-          </Navbar.Brand>
-          <Nav className="me-auto">
-            {isLogin ? (
-              <Nav.Link href="/AutoTrading">코인자동매매</Nav.Link>
-            ) : (
-              <Nav.Link href="/Login">코인자동매매</Nav.Link>
-            )}
-          </Nav>
-          <Nav>
-            {isLogin ? (
-              <Nav.Link href="/">{userName}</Nav.Link>
-            ) : (
-              <Nav.Link href="/Login">{userName}</Nav.Link>
-            )}
-          </Nav>
-        </Container>
-      </Navbar>
-    </>
+    <NavBar>
+      <NavBrand>
+        <Link to={"/"}>💰COBOK</Link>
+      </NavBrand>
+      <NavAutoTrading>
+        <Link to={"/AutoTrading"}>코인자동매매</Link>
+      </NavAutoTrading>
+
+      <NavSignIn>
+        {isLogin ? (
+          <Link to={"/"}>{userName}</Link>
+        ) : (
+          <Link to={"/SignIn"}>{userName}</Link>
+        )}
+      </NavSignIn>
+      <NavSignUp>
+        <Link to={"/SignUp"}>회원가입</Link>
+      </NavSignUp>
+    </NavBar>
   );
 }
