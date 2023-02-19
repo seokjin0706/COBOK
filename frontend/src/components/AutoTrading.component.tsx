@@ -23,12 +23,13 @@ const OverviewContainer = styled.div<{ ratio: number }>`
   grid-template-columns: repeat(${(props) => props.ratio}, 1fr);
 `;
 const Overview = styled.div`
+  width: 100%;
   justify-content: space-between;
 
   background-color: ${(props) => props.theme.btnColor};
   padding: 30px 20px;
   border-radius: 10px;
-  margin: 20px 10px;
+  margin: 15px 10px;
 `;
 
 const OverviewItem = styled.div`
@@ -45,6 +46,7 @@ interface IResult {
   Free_wallet: string;
   Total_wallet: string;
   average: string;
+  coin_curr_price: string;
   leverage: string;
   position_wallet: string;
   profit: string;
@@ -61,7 +63,8 @@ export function AutoTradingResult() {
   return (
     <>
       <Button
-        className="login-btn"
+        id="refresh-btn-id"
+        className="refresh-btn"
         type="submit"
         onClick={() => {
           axios
@@ -76,6 +79,7 @@ export function AutoTradingResult() {
       >
         코인 자동매매 결과 새로고침
       </Button>
+
       <OverviewContainer ratio={1}>
         <Overview>
           <OverviewItem>
@@ -84,11 +88,27 @@ export function AutoTradingResult() {
           </OverviewItem>
         </Overview>
       </OverviewContainer>
+      <OverviewContainer ratio={1}>
+        <Overview>
+          <OverviewItem>
+            <span>총 입금액</span>
+            <span>{result?.Total_wallet}</span>
+          </OverviewItem>
+        </Overview>
+      </OverviewContainer>
+      <OverviewContainer ratio={1}>
+        <Overview>
+          <OverviewItem>
+            <span>현재 현금 보유량</span>
+            <span>{result?.Free_wallet}</span>
+          </OverviewItem>
+        </Overview>
+      </OverviewContainer>
       <OverviewContainer ratio={2}>
         <Overview>
           <OverviewItem>
             <span>현재 코인 가격</span>
-            <span>?$</span>
+            <span>{result?.coin_curr_price}$</span>
           </OverviewItem>
         </Overview>
         <Overview>
@@ -100,7 +120,7 @@ export function AutoTradingResult() {
         <Overview>
           <OverviewItem>
             <span>현재 매매 평단가</span>
-            <span>?$</span>
+            <span>{result?.average}$</span>
           </OverviewItem>
         </Overview>
         <Overview>
