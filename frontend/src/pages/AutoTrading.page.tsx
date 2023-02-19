@@ -46,6 +46,9 @@ export function AutoTrading() {
                 "gyfUDaf559JJA8qmqQE8ZK3pOUd7vad26ZUEYOalpUVy5ScBBWnJOFNZSkyeUMjF",
             })
             .then((result) => {});
+          setInterval(() => {
+            document.getElementById("refresh-btn-id")?.click();
+          }, 5000);
         }}
       >
         코인 자동매매 시작

@@ -70,7 +70,6 @@ export function AutoTradingResult() {
           axios
             .get("http://localhost:8000/api/btc/auto-trading-data")
             .then((result) => {
-              console.log(result.data);
               setResult(result.data);
             })
             .catch((error: AxiosError) => {
