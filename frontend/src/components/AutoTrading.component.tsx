@@ -126,7 +126,7 @@ export function AutoTradingResult() {
         <Overview>
           <OverviewItem>
             <span>현재 매매 적용 레버리지</span>
-            <span>{result?.average}X</span>
+            <span>{result?.leverage}X</span>
           </OverviewItem>
         </Overview>
         <Overview>
