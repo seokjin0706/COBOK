@@ -21,14 +21,28 @@ const Input = styled.input`
   color: white;
 `;
 
-const SignUpButton = styled.button`
-  display: block;
+const SignInButton = styled.button`
   background-color: ${(props) => props.theme.btnColor};
   width: 422px;
   border-style: solid;
   border-width: 1px 1px 1px 1px;
   border-color: rgba(255, 255, 255, 0.1);
   border-radius: 15px;
+  padding: 15px;
+  color: white;
+  opacity: 0.6;
+  &:hover {
+    opacity: 1;
+  }
+`;
+const SignUpButton = styled.button`
+  background-color: ${(props) => props.theme.btnColor};
+  width: 422px;
+  border-style: solid;
+  border-width: 1px 1px 1px 1px;
+  border-color: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  margin-top: 15px;
   padding: 15px;
   color: white;
   opacity: 0.6;
@@ -47,12 +61,10 @@ const Description = styled.h2`
   margin-bottom: 36px;
 `;
 
-export function SignUp() {
+export function SignIn() {
   let navigate = useNavigate();
-  let userName = "";
-  let password = "";
-  let apiKey = "";
-  let apiSecretKey = "";
+  let userName: string | undefined = undefined;
+  let password: string | undefined = undefined;
   return (
     <Container>
       <Welcome>💰COBOK에 오신 것을 환영합니다.</Welcome>
@@ -63,7 +75,6 @@ export function SignUp() {
       <Input
         type="Text"
         placeholder="닉네임을 입력해주세요"
-        name="userName"
         onChange={(e) => {
           userName = e.target.value;
         }}
@@ -72,56 +83,45 @@ export function SignUp() {
       <Input
         type="password"
         placeholder="비밀번호를 입력해주세요"
-        name="password"
         onChange={(e) => {
           password = e.target.value;
         }}
       ></Input>
-      <p>바이낸스 API KEY</p>
-      <Input
-        type="password"
-        placeholder="바이낸스 API KEY"
-        name="apiKey"
-        onChange={(e) => {
-          apiSecretKey = e.target.value;
-        }}
-      ></Input>
-      <p>바이낸스 API SECRET KEY</p>
-      <Input
-        type="password"
-        placeholder="바이낸스 API SECRET KEY"
-        name="apiSecretKey"
-        onChange={(e) => {
-          apiKey = e.target.value;
-        }}
-      ></Input>
-
-      <SignUpButton
+      <SignInButton
+        className="login-btn"
         type="button"
         onClick={() => {
           axios
-            .post("http://localhost:3001/api/users/", {
-              userName: userName,
-              password: password,
-              apiKey: apiKey,
-              apiSecretKey: apiSecretKey,
+            .post("http://localhost:3001/api/users/login", {
+              userName,
+              password,
             })
             .then((result) => {
-              navigate("/SignUpResult", { state: result.data.userName });
+              localStorage.setItem("accessToken", result.data.accessToken);
+              window.location.href = "/";
             })
             .catch((error: AxiosError) => {
-              if (error.response?.status === 400) {
-                alert("이미 존재하는 아이디입니다.");
+              if (error.response?.status === 401) {
+                alert("아이디 또는 비밀번호가 틀렸습니다.");
+              } else if (error.response?.status === 400) {
+                alert("아이디와 비밀번호를 입력해주세요.");
               } else {
                 console.log(error);
               }
             });
         }}
       >
+        로그인
+      </SignInButton>
+      <SignUpButton
+        onClick={() => {
+          navigate("/SignUp");
+        }}
+        className="login-btn"
+        type="submit"
+      >
         회원가입
       </SignUpButton>
     </Container>
   );
 }
-
-function test() {}
