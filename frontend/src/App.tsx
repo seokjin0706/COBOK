@@ -7,6 +7,7 @@ import { SignUpResult } from "./pages/SignUpResult.page";
 import { CobokNavbar } from "./components/CobokNavbar.component";
 
 import { createGlobalStyle } from "styled-components";
+import { Coins } from "./pages/Coins.page";
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -85,6 +86,7 @@ function App() {
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/SignUpResult" element={<SignUpResult />} />
+        <Route path="/" element={<Coins />} />
       </Routes>
     </>
   );

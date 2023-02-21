@@ -33,17 +33,14 @@ const NavAutoTrading = styled.span`
   }
 `;
 const NavSignIn = styled.span`
-  font-size: 18px;
-  border: 1px solid white;
+  font-size: 15px;
   border-radius: 15px;
-  padding: 10px 20px;
   a:hover {
     color: ${(props) => props.theme.accentColor};
   }
 `;
 const NavSignUp = styled.span`
-  font-size: 18px;
-  border: 1px solid white;
+  font-size: 15px;
   border-radius: 15px;
   padding: 10px 20px;
   margin-right: 80px;
