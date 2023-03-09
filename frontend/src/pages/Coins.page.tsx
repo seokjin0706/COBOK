@@ -1,7 +1,13 @@
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
-import { fetchCoins } from "../utils/api";
+import {
+  fetchAutoTrading,
+  fetchAutoTradingResult,
+  fetchCoins,
+} from "../utils/api";
 import { Link } from "react-router-dom";
+import Chart from "../components/CoinsChart.component";
+import { useState, useEffect } from "react";
 interface ICoin {
   id: string;
   name: string;
@@ -14,9 +20,9 @@ interface ICoin {
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
-
-  padding: 20px 60px 20px 60px;
-  width: 100%;
+  margin: 0 auto;
+  padding: 20px 60px 20px 0px;
+  width: 1510px;
 `;
 const Loader = styled.div`
   text-align: center;
@@ -39,7 +45,7 @@ const CoinListHeader = styled.div`
   font-size: 11px;
   font-weight: bold;
   span {
-    padding-right: 20px;
+    padding-right: 17px;
 
     :nth-child(1) {
       padding-left: 40px;
@@ -117,8 +123,9 @@ const ChartContainer = styled.div`
   width: 100%;
 `;
 const ChartHeader = styled.div`
-  padding: 20px;
+  padding: 15px 20px 15px 20px;
   background-color: ${(props) => props.theme.btnColor};
+  margin-bottom: 15px;
 `;
 const ChartHeaderTitle = styled.div`
   span {
@@ -164,17 +171,124 @@ const ChartHeaderMaxMinPrice = styled.div`
     }
   }
 `;
-const ChartGraph = styled.div`
-  margin-top: 50px;
-  padding: 60px;
+
+const AutoTradingStartButton = styled.button`
   background-color: ${(props) => props.theme.btnColor};
+  color: tomato;
+  border-style: solid;
+  border-width: 1px 1px 1px 1px;
+  border-color: rgba(179, 30, 30, 0.6);
+  border-radius: 5px;
+  padding: 6px;
+  font-size: 12px;
+  margin-left: 490px;
+  &:hover {
+    opacity: 0.6;
+  }
+`;
+const AutoTradingStopButton = styled.button`
+  background-color: ${(props) => props.theme.btnColor};
+  color: ${(props) => props.theme.textColor};
+  border-style: solid;
+  border-width: 1px 1px 1px 1px;
+  border-color: rgba(248, 241, 241, 0.6);
+  border-radius: 5px;
+  padding: 6px;
+  margin-left: 10px;
+  font-size: 12px;
+
+  &:hover {
+    opacity: 0.6;
+  }
+`;
+const AutoTradingResultContainer = styled.div`
+  margin-left: auto;
+  div {
+    margin-top: 8px;
+    text-align: center;
+    font-weight: bold;
+    color: red;
+    font-size: 14px;
+  }
+`;
+const AutoTradingResultTable = styled.table`
+  font-size: 12px;
+
+  td {
+    padding-top: 10px;
+    :nth-child(1) {
+      font-weight: bold;
+      color: grey;
+    }
+    :nth-child(2) {
+      text-align: right;
+      width: 100px;
+      padding-right: 10px;
+    }
+    :nth-child(3) {
+      font-weight: bold;
+      color: grey;
+    }
+    :nth-child(4) {
+      text-align: right;
+      width: 100px;
+    }
+  }
 `;
 
+const ProfitText = styled.span<{ color: string }>`
+  color: ${(props) => props.color};
+`;
+
+interface IAutoTradingResult {
+  raw_Time: string;
+  time: string;
+  average: string;
+  leverage: string;
+  quantity: string;
+  profit_rate: number;
+  profit: number;
+  signal: string;
+  total_profit: string;
+  coin_curr_price: string;
+  position_wallet: string;
+  Free_wallet: string;
+  Total_wallet: string;
+}
 export function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>({
     queryKey: ["coins"],
     queryFn: fetchCoins,
   });
+  const {
+    isLoading: autoTradingLoading,
+    data: autoTradingData,
+    refetch,
+  } = useQuery({
+    queryKey: ["autoTrading"],
+    queryFn: fetchAutoTrading,
+    enabled: false,
+  });
+  const [resultLoading, setResultLoading] = useState(false);
+  const [autoTradingResult, setAutoTradingResult] =
+    useState<IAutoTradingResult>();
+  const [signal, setSignal] = useState<string | undefined>();
+  const [leverage, setLeverage] = useState<string | undefined>();
+  const [quantity, setQuantity] = useState<string | undefined>();
+  const [profit, setProfit] = useState<number | undefined>();
+  const [profitRate, setProfitRate] = useState<number | undefined>();
+  const [average, setAverage] = useState<string | undefined>();
+  const [curCoinPirce, setCurCoinPrice] = useState<string | undefined>();
+
+  useEffect(() => {
+    setSignal(autoTradingResult?.signal);
+    setLeverage(autoTradingResult?.leverage);
+    setQuantity(autoTradingResult?.quantity);
+    setProfit(autoTradingResult?.profit);
+    setProfitRate(autoTradingResult?.profit_rate);
+    setAverage(autoTradingResult?.average);
+    setCurCoinPrice(autoTradingResult?.coin_curr_price);
+  }, [autoTradingResult]);
 
   return (
     <Container>
@@ -183,21 +297,73 @@ export function Coins() {
           <ChartHeaderTitle>
             <span>Bitcoin</span>
             <span>BTC</span>
+            <AutoTradingStartButton
+              type="button"
+              onClick={() => {
+                setResultLoading(true);
+                refetch();
+                setInterval(async () => {
+                  const result = await fetchAutoTradingResult();
+                  setAutoTradingResult(result.data);
+                  setResultLoading(false);
+                }, 5000);
+              }}
+            >
+              오토 트레이딩 시작
+            </AutoTradingStartButton>
+            <AutoTradingStopButton>오토 트레이딩 종료</AutoTradingStopButton>
           </ChartHeaderTitle>
-          <ChartHeaderPrice>
-            <span>$0.999999</span>
-            <span>+2.67%</span>
-          </ChartHeaderPrice>
-          <ChartHeaderMaxMinPrice>
-            <span>고가 </span>
-            <span>$0.123239999</span>
-            <span>저가 </span>
-            <span>$0.32999</span>
-          </ChartHeaderMaxMinPrice>
+          <div style={{ display: "flex" }}>
+            <div>
+              <ChartHeaderPrice>
+                <span>$0.999999</span>
+                <span>+2.67%</span>
+              </ChartHeaderPrice>
+              <ChartHeaderMaxMinPrice>
+                <span>고가 </span>
+                <span>$0.123239999</span>
+                <span>저가 </span>
+                <span>$0.32999</span>
+              </ChartHeaderMaxMinPrice>
+            </div>
+            <AutoTradingResultContainer>
+              <AutoTradingResultTable>
+                <tr>
+                  <td>시그널</td>
+                  <td>{signal}</td>
+                  <td>레버리지</td>
+                  <td>{leverage}X</td>
+                </tr>
+                <tr>
+                  <td>총 매수</td>
+                  <td>${average}</td>
+                  <td>평가손익</td>{" "}
+                  <td>
+                    {profitRate! >= 0 ? (
+                      <ProfitText color={"red"}>{profit}$</ProfitText>
+                    ) : (
+                      <ProfitText color={"blue"}>{profit}$</ProfitText>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>총 평가</td>
+                  <td>${curCoinPirce}</td>
+                  <td>수익률</td>
+                  <td>
+                    {profitRate! >= 0 ? (
+                      <ProfitText color={"red"}>{profitRate}%</ProfitText>
+                    ) : (
+                      <ProfitText color={"blue"}>{profitRate}%</ProfitText>
+                    )}
+                  </td>
+                </tr>
+              </AutoTradingResultTable>
+              {resultLoading ? <div>"loading..." </div> : null}
+            </AutoTradingResultContainer>
+          </div>
         </ChartHeader>
-        <ChartGraph>
-          <p>그래프</p>
-        </ChartGraph>
+        <Chart />
       </ChartContainer>
       <CoinsList>
         <CoinListHeader>

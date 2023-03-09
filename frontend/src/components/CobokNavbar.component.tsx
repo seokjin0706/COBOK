@@ -78,7 +78,7 @@ export function CobokNavbar() {
         <Link to={"/"}>💰COBOK</Link>
       </NavBrand>
       <NavAutoTrading>
-        <Link to={"/AutoTrading"}>코인자동매매</Link>
+        <Link to={"#"}>오토트레이딩</Link>
       </NavAutoTrading>
 
       <NavSignIn>

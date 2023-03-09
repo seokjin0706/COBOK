@@ -1,6 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
-import { AutoTrading } from "./pages/AutoTrading.page";
 import { SignIn } from "./pages/SignIn.page";
 import { SignUp } from "./pages/SignUp.page";
 import { SignUpResult } from "./pages/SignUpResult.page";
@@ -57,6 +56,7 @@ q:before, q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+  
 }
 
 
@@ -82,7 +82,6 @@ function App() {
       <GlobalStyle></GlobalStyle>
       <CobokNavbar />
       <Routes>
-        <Route path="/AutoTrading" element={<AutoTrading />} />
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/SignUpResult" element={<SignUpResult />} />
