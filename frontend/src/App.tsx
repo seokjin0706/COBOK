@@ -1,12 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
-import { AutoTrading } from "./pages/AutoTrading.page";
 import { SignIn } from "./pages/SignIn.page";
 import { SignUp } from "./pages/SignUp.page";
 import { SignUpResult } from "./pages/SignUpResult.page";
 import { CobokNavbar } from "./components/CobokNavbar.component";
 
 import { createGlobalStyle } from "styled-components";
+import { Coins } from "./pages/Coins.page";
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -56,6 +56,7 @@ q:before, q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+  
 }
 
 
@@ -81,10 +82,10 @@ function App() {
       <GlobalStyle></GlobalStyle>
       <CobokNavbar />
       <Routes>
-        <Route path="/AutoTrading" element={<AutoTrading />} />
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/SignUpResult" element={<SignUpResult />} />
+        <Route path="/" element={<Coins />} />
       </Routes>
     </>
   );
